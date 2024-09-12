@@ -30,6 +30,10 @@ let persons = [
         "number": "112"
       }
     ]
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
   
 app.get('/api/persons', (request, response) => {
   response.json(persons)
@@ -53,9 +57,23 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  persons = persons.filter(person => persons.id !== id)
+  persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: getRandomInt(2147483647),
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
 })
 
 const PORT = 3001
