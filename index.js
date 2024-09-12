@@ -3,9 +3,7 @@ const app = express()
 
 app.use(express.json())
 
-let phoneBook = 
-  {
-    "persons": [
+let persons = [
       {
         "name": "Arto Hellas",
         "number": "040-123456",
@@ -22,26 +20,35 @@ let phoneBook =
         "id": "3"
       },
       {
-        "id": "5c46",
+        "id": "4",
         "name": "Tuomas Liikala",
         "number": "0405913064"
       },
       {
-        "id": "0f3f",
+        "id": "5",
         "name": "Hätänumero",
         "number": "112"
       }
     ]
-  }
-
-
+  
 app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
 
 app.get('/info', (request, response) => {
-  response.send(`<p>Phonebook has info for ${phoneBook.persons.length} people</p>
+  response.send(`<p>Phonebook has info for ${persons.length} people</p>
     <p>${new Date()}</p>`)
+})
+
+app.get('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  const person = persons.find(person => person.id === id)
+  
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
 })
 
 const PORT = 3001
