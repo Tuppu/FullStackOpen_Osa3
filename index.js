@@ -32,8 +32,13 @@ let persons = [
 ]
 
 morgan('tiny')
-
-let morgan_logger = morgan(':method :url :status :res[content-length] - :response-time ms');
+morgan.token('res-body', function (req, res)
+{ 
+  if (req.body && res.statusCode < 400) {
+    return JSON.stringify(req.body);
+  } 
+})
+let morgan_logger = morgan(':method :url :status :res[content-length] - :response-time ms - :res-body');
 app.use(morgan_logger);
 app.use(express.json())
 
