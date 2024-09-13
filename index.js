@@ -1,35 +1,41 @@
 const express = require('express')
+const morgan = require('morgan')
+
 const app = express()
 
-app.use(express.json())
-
 let persons = [
-      {
-        "name": "Arto Hellas",
-        "number": "040-123456",
-        "id": "1"
-      },
-      {
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523",
-        "id": "2"
-      },
-      {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": "3"
-      },
-      {
-        "id": "4",
-        "name": "Tuomas Liikala",
-        "number": "0405913064"
-      },
-      {
-        "id": "5",
-        "name": "Hätänumero",
-        "number": "112"
-      }
-    ]
+  {
+    "name": "Arto Hellas",
+    "number": "040-123456",
+    "id": "1"
+  },
+  {
+    "name": "Ada Lovelace",
+    "number": "39-44-5323523",
+    "id": "2"
+  },
+  {
+    "name": "Dan Abramov",
+    "number": "12-43-234345",
+    "id": "3"
+  },
+  {
+    "id": "4",
+    "name": "Tuomas Liikala",
+    "number": "0405913064"
+  },
+  {
+    "id": "5",
+    "name": "Hätänumero",
+    "number": "112"
+  }
+]
+
+morgan('tiny')
+
+let morgan_logger = morgan(':method :url :status :res[content-length] - :response-time ms');
+app.use(morgan_logger);
+app.use(express.json())
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
