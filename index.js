@@ -1,7 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 
 const app = express()
+
+app.use(cors())
 
 let persons = [
   {
@@ -57,7 +60,7 @@ app.get('/info', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  const person = persons.find(person => person.id === id)
+  const person = persons.find(person => person.id == id)
   
   if (person) {
     response.json(person)
@@ -68,14 +71,13 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  persons = persons.filter(person => person.id !== id)
+  persons = persons.filter(person => person.id != id)
 
   response.status(204).end()
 })
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-;
   if (!body.name) {
     return response.status(400).json({ 
       error: 'name missing' 
@@ -93,7 +95,6 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-
   const person = {
     name: body.name,
     number: body.number,
@@ -105,6 +106,6 @@ app.post('/api/persons', (request, response) => {
   response.json(person)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
