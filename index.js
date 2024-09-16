@@ -36,8 +36,6 @@ let persons = [
   }
 ]
 
-//const Person = people.model('Person', personSchema)
-
 morgan('tiny')
 morgan.token('res-body', function (req, res)
 { 
@@ -84,32 +82,25 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  if (!body.name) {
+
+  if (body.name === undefined) {
     return response.status(400).json({ 
       error: 'name missing' 
     })
-  } else if (!body.number) {
+  } else if (body.number === undefined) {
     return response.status(400).json({ 
       error: 'number missing' 
     })
   }
 
-  const personFound = persons.find(person => person.name === body.name)
-  if (personFound) {
-    return response.status(409 ).json({ 
-      error: 'name must be unique' 
-    })
-  }
-
-  const person = {
+  const person = new Person({
     name: body.name,
-    number: body.number,
-    id: getRandomInt(2147483647),
-  }
+    number: body.number
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 const PORT = process.env.PORT || 3001
