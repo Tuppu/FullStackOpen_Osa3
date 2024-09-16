@@ -1,0 +1,1 @@
+GET https://fullstackopen-osa3-ykr5.onrender.com/info
