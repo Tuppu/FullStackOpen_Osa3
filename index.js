@@ -8,44 +8,44 @@ const app = express()
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
-let morgan_logger = morgan(':method :url :status :res[content-length] - :response-time ms - :res-body');
-app.use(morgan_logger);
+let morgan_logger = morgan(':method :url :status :res[content-length] - :response-time ms - :res-body')
+app.use(morgan_logger)
 morgan('tiny')
 morgan.token('res-body', function (req, res)
-{ 
+{
   if (req.body && res.statusCode < 400) {
-    return JSON.stringify(req.body);
-  } 
+    return JSON.stringify(req.body)
+  }
 })
 
 let persons = [
   {
-    "name": "Arto Hellas",
-    "number": "040-123456",
-    "id": "1"
+    'name': 'Arto Hellas',
+    'number': '040-123456',
+    'id': '1'
   },
   {
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523",
-    "id": "2"
+    'name': 'Ada Lovelace',
+    'number': '39-44-5323523',
+    'id': '2'
   },
   {
-    "name": "Dan Abramov",
-    "number": "12-43-234345",
-    "id": "3"
+    'name': 'Dan Abramov',
+    'number': '12-43-234345',
+    'id': '3'
   },
   {
-    "id": "4",
-    "name": "Tuomas Liikala",
-    "number": "0405913064"
+    'id': '4',
+    'name': 'Tuomas Liikala',
+    'number': '0405913064'
   },
   {
-    "id": "5",
-    "name": "Hätänumero",
-    "number": "112"
+    'id': '5',
+    'name': 'Hätänumero',
+    'number': '112'
   }
 ]
-  
+
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
@@ -57,7 +57,7 @@ app.get('/info', (request, response) => {
     <p>${new Date()}</p>`)
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
 
   Person.findById(request.params.id)
     .then(person => {
@@ -73,7 +73,7 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response, next) => {
 
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -90,7 +90,7 @@ app.post('/api/persons', (request, response, next) => {
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -101,7 +101,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, 
+  Person.findByIdAndUpdate(request.params.id, person,
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {
