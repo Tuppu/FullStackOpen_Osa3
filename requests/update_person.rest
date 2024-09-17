@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
     "name": "Paavo puhelin",
-    "number": "+358-700-12000"
+    "number": "112"
 }
